@@ -5,7 +5,6 @@ import '../../screens/precautions_page.dart';
 import '../../screens/symptoms_page.dart';
 import '../../screens/updates_page.dart';
 import '../../screens/virus_details_page.dart';
-import '../../screens/stats_dashboard_screens/world_stat.dart';
 import '../../screens/nearby_hospitals_screen.dart';
 import '../../screens/symptom_checker.dart'; // Import Symptom Checker Screen
 
@@ -49,8 +48,9 @@ class CategoryTab extends StatelessWidget {
             builder: (context) =>
                 UpdatesPage(color: color, imgPath: imgPath)));
       case "Phylogeny":
-        return () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => WorldStatScreen()));
+        return () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                VirusDetailsScreen(color: color, imgPath: imgPath)));
       case "Nearby Hospitals":  
         return () => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
