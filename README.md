@@ -56,11 +56,34 @@
 - Special thanks to faculty and mentors at *Aditya College Of Engineering And Technology*
 
 ---
+---
+## 🐳 Docker Build (Containerized APK Build)
+
+This project includes a `Dockerfile` that fully containerizes the Flutter build environment, so the Android APK can be built without installing Flutter, Android SDK, or Gradle locally — everything needed is bundled inside the Docker image.
+
+### Why
+Containerizing the build environment ensures a consistent, reproducible build regardless of the host machine, and is the foundation for automated CI/CD pipelines (see GitHub Actions workflow below).
+
+### Prerequisites
+- [Docker](https://docs.docker.com/get-docker/) installed on your machine
+
+### Build the Docker image
+\`\`\`bash
+docker build -t hmpv-shield-builder .
+\`\`\`
+This pulls a Flutter SDK base image, installs project dependencies, and runs `flutter build apk --release` entirely inside the container.
+
+### Extract the built APK
+\`\`\`bash
+docker create --name temp-container hmpv-shield-builder
+docker cp temp-container:/app/build/app/outputs/flutter-apk/app-release.apk ./app-release.apk
+docker rm temp-container
+\`\`\`
+The signed release APK (`app-release.apk`) will now be available in your project's root directory.
 
 ## 📬 Contact
 
 **Developer:** Ram Kumar  
 📧 Email: ramkumar20034@gmail.com 
-📍 Location: Arikarevula, East Godavari
 
 ---
