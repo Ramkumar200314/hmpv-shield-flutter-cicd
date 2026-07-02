@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build Docker image
         run: docker build -t hmpv-shield-builder .
@@ -23,7 +23,7 @@ jobs:
           docker rm temp-container
 
       - name: Upload APK as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: app-release-apk
           path: app-release.apk
