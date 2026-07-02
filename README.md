@@ -10,6 +10,8 @@ A Flutter-based Android health awareness app with a fully containerized build en
 
 ## ⚙️ DevOps Architecture
 
+![CI/CD Architecture](images/cicd-architecture.png)
+
 ---
 
 ## 🐳 Docker — Containerized Build Environment
