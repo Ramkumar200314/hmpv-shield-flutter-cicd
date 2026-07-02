@@ -1,0 +1,29 @@
+name: Build APK with Docker
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t hmpv-shield-builder .
+
+      - name: Extract APK from container
+        run: |
+          docker create --name temp-container hmpv-shield-builder
+          docker cp temp-container:/app/build/app/outputs/flutter-apk/app-release.apk ./app-release.apk
+          docker rm temp-container
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: app-release.apk
