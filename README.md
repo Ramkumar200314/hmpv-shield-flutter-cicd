@@ -53,6 +53,20 @@ The `.github/workflows/build.yml` workflow automates the full build pipeline on 
 
 ---
 
+## 📥 Download the App (APK)
+
+No need to build locally — the APK is automatically built by the CI/CD pipeline on every push.
+
+1. Go to the [Actions tab](https://github.com/Ramkumar200314/hmpv-shield-flutter-cicd/actions)
+2. Click the latest successful workflow run ✅
+3. Scroll to the **Artifacts** section at the bottom
+4. Click **app-release-apk** to download
+5. Unzip and install the `.apk` on any Android device
+
+> Enable **"Install from unknown sources"** on your Android phone before installing.
+
+---
+
 ## 📱 About the App
 
 **HMPV Shield** is a health awareness Android app developed as an MCA final year project. It spreads awareness about Human Metapneumovirus (HMPV) and provides tools for symptom checking, nearby hospital lookup, and real-time health news.
