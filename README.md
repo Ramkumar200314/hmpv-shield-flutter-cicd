@@ -1,23 +1,81 @@
-# 🛡️ HMPV Shield(HMPV RISK IDENTIFICATION AND ADVICE SYSTEM)
+# 🛡️ HMPV Shield — Flutter App with Dockerized CI/CD Pipeline
 
-**HMPV Shield** is a Flutter-based Android app developed as an MCA final year project. It spreads awareness about **Human Metapneumovirus (HMPV)** and provides health tools such as symptom checking, nearby hospital lookup, and real-time news updates.
+![Build APK with Docker](https://github.com/Ramkumar200314/hmpv-shield-flutter-cicd/actions/workflows/build.yml/badge.svg)
+
+A Flutter-based Android health awareness app with a fully containerized build environment and automated CI/CD pipeline using Docker and GitHub Actions.
+
+> 🎯 **DevOps Highlight:** Every push to `main` automatically triggers a Docker-based build pipeline that compiles and packages the Android APK in a reproducible, containerized environment — no local Flutter/Android SDK installation required.
 
 ---
 
-## 📱 App Features
+## ⚙️ DevOps Architecture
 
-- 🧬 **Splash Screen** – Smooth app launch experience.
-- 🏠 **Dashboard** – Quick access to all features.
-- 🔬 **Phylogeny** – Understand the viral lineage and evolution.
-- 🩹 **Precautions** – Tips to stay safe from HMPV.
-- 🩺 **Symptom Checker** – Input symptoms and assess risk level.
-- 📰 **Real-Time News** – Health-related news via NewsAPI.
-- 📚 **Virus Info** – Learn about HMPV in detail.
-- 🚨 **Risk Assessment** – Get categorized risk levels (e.g., High Risk).
-- ❓ **Myths** – Bust common misconceptions.
-- ℹ️ **About App** – Overview of the app’s purpose.
-- 🎖️ **Rating & Credits Menu** – Rate the app or view developers.
-- ⭐ **Rate App** – Share your feedback and rating.
+---
+
+## 🐳 Docker — Containerized Build Environment
+
+The `Dockerfile` bundles the entire Flutter + Android SDK toolchain into a single image, ensuring consistent, reproducible builds across any environment.
+
+### Build locally
+
+```bash
+# Build the Docker image
+docker build -t hmpv-shield-builder .
+
+# Extract the APK from the container
+docker create --name temp-container hmpv-shield-builder
+docker cp temp-container:/app/build/app/outputs/flutter-apk/app-release.apk ./app-release.apk
+docker rm temp-container
+```
+
+### Key decisions made
+- Pinned Flutter to `3.24.5` (matching project's Dart SDK `^3.5.4`) to avoid breaking changes in newer Flutter versions
+- Added `.dockerignore` to exclude `build/`, `.dart_tool/`, and IDE files — keeps image lean and build fast
+- Debugged and resolved Gradle (8.4), AGP (8.3.2), Kotlin (2.1.0), and NDK version conflicts during containerization
+
+---
+
+## 🔁 CI/CD Pipeline — GitHub Actions
+
+The `.github/workflows/build.yml` workflow automates the full build pipeline on every push.
+
+### Pipeline steps
+1. Checkout source code
+2. Build Docker image with full Flutter + Android toolchain
+3. Run `flutter build apk --release` inside the container
+4. Extract APK from container
+5. Upload APK as a downloadable artifact
+
+### View live builds
+→ [Actions Tab](https://github.com/Ramkumar200314/hmpv-shield-flutter-cicd/actions) — see all workflow runs, logs, and download built APKs
+
+---
+
+## 📱 About the App
+
+**HMPV Shield** is a health awareness Android app developed as an MCA final year project. It spreads awareness about Human Metapneumovirus (HMPV) and provides tools for symptom checking, nearby hospital lookup, and real-time health news.
+
+### Features
+- 🩺 Symptom Checker — assess HMPV risk level
+- 📰 Real-Time News — health news via NewsAPI
+- 🗺️ Nearby Hospitals — Google Maps integration
+- 🚨 Risk Assessment — categorized risk levels
+- 📚 Virus Info, Precautions, Myths sections
+- 🔥 Firebase backend integration
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| App | Flutter, Dart |
+| Backend | Firebase (Firestore, Core) |
+| Maps | Google Maps API |
+| News | NewsAPI |
+| Containerization | Docker |
+| CI/CD | GitHub Actions |
+| Build Tool | Gradle + Android SDK |
 
 ---
 
@@ -25,65 +83,35 @@
 
 | Feature | Screenshot |
 |--------|-------------|
-| 1. Splash Screen | ![Splash Screen](images/splash_screen.jpg) |
-| 2. Dashboard | ![Dashboard](images/Dashboard.jpg) |
-| 3. Phylogeny | ![Phylogeny](images/phylogony.jpg) |
-| 4. Precautions | ![Precautions](images/precautions.jpg) |
-| 5. Symptom Checker | ![Symptom Checker](images/Symptom%20checker.jpg) |
-| 6. News / Updates | ![News](images/Updates_Screen.jpg) |
-| 7. Virus Info | ![Virus Info](images/Virus_Info.jpg) |
-| 8. Risk Assessment Result | ![Risk](images/Hmpv%20risk%20assesment.jpg) |
-| 9. Myths Debunked | ![Myths](images/Myths_screen.jpg) |
-| 10. About App | ![About App](images/About%20App.jpg) |
-| 11. Rating & Credits Menu | ![Rating Menu](images/Rating%20&%20Credits%20Menu.jpg) |
-| 12. Rate Us Page | ![Rate App](images/Rating%20app.jpg) |
+| Splash Screen | ![Splash Screen](images/splash_screen.jpg) |
+| Dashboard | ![Dashboard](images/Dashboard.jpg) |
+| Symptom Checker | ![Symptom Checker](images/Symptom%20checker.jpg) |
+| News / Updates | ![News](images/Updates_Screen.jpg) |
+| Virus Info | ![Virus Info](images/Virus_Info.jpg) |
+| Risk Assessment | ![Risk](images/Hmpv%20risk%20assesment.jpg) |
+| Myths Debunked | ![Myths](images/Myths_screen.jpg) |
+| Precautions | ![Precautions](images/precautions.jpg) |
 
 ---
 
-## 🚀 Technologies Used
+## 🔧 Bugs Fixed During Containerization
 
-- **Flutter** & **Dart**
-- **Firebase**
-- **Google Maps API**
-- **NewsAPI**
-- **Material Design Components**
+This section documents real issues debugged and resolved during the Docker build process — demonstrating practical DevOps troubleshooting skills:
 
----
-
-## 🙌 Acknowledgements
-
-- Developed as part of MCA Final Year Project  
-- Special thanks to faculty and mentors at *Aditya College Of Engineering And Technology*
+| Issue | Root Cause | Fix Applied |
+|-------|-----------|-------------|
+| Gradle version mismatch | Project used 8.4, Flutter needed 8.7+ | Pinned Gradle to compatible version |
+| AGP version mismatch | AGP 8.3.2 incompatible with new Flutter | Kept AGP 8.3.2, pinned Flutter to 3.24.5 |
+| Kotlin metadata error | Kotlin 2.1.0 metadata incompatible with AGP | Aligned Kotlin/AGP/Gradle versions |
+| font_awesome_flutter IconData error | New Flutter made IconData a final class | Pinned Flutter to 3.24.5 (pre-breaking-change) |
+| Missing screen reference | world_stat.dart deleted but import left in code | Removed broken import and remapped navigation |
+| NDK version mismatch | Firebase plugins needed NDK 26.x, project had 25.x | Documented; build proceeds with warning |
 
 ---
----
-## 🐳 Docker Build (Containerized APK Build)
-
-This project includes a `Dockerfile` that fully containerizes the Flutter build environment, so the Android APK can be built without installing Flutter, Android SDK, or Gradle locally — everything needed is bundled inside the Docker image.
-
-### Why
-Containerizing the build environment ensures a consistent, reproducible build regardless of the host machine, and is the foundation for automated CI/CD pipelines (see GitHub Actions workflow below).
-
-### Prerequisites
-- [Docker](https://docs.docker.com/get-docker/) installed on your machine
-
-### Build the Docker image
-\`\`\`bash
-docker build -t hmpv-shield-builder .
-\`\`\`
-This pulls a Flutter SDK base image, installs project dependencies, and runs `flutter build apk --release` entirely inside the container.
-
-### Extract the built APK
-\`\`\`bash
-docker create --name temp-container hmpv-shield-builder
-docker cp temp-container:/app/build/app/outputs/flutter-apk/app-release.apk ./app-release.apk
-docker rm temp-container
-\`\`\`
-The signed release APK (`app-release.apk`) will now be available in your project's root directory.
 
 ## 📬 Contact
 
-**Developer:** Ram Kumar  
-📧 Email: ramkumar20034@gmail.com 
-
----
+**Developer:** Ram Kumar Kundrapu
+📧 Email: ramkumar20034@gmail.com
+🔗 LinkedIn: [linkedin.com/in/ramkumarkundrapu](https://linkedin.com/in/ramkumarkundrapu)
+📍 Location: Hyderabad, Telangana, India
