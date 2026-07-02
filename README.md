@@ -69,7 +69,7 @@ No need to build locally — the APK is automatically built by the CI/CD pipelin
 
 ## 📱 About the App
 
-**HMPV Shield** is a health awareness Android app developed as an MCA final year project. It spreads awareness about Human Metapneumovirus (HMPV) and provides tools for symptom checking, nearby hospital lookup, and real-time health news.
+**HMPV Shield** is a health awareness Android app. It spreads awareness about Human Metapneumovirus (HMPV) and provides tools for symptom checking, nearby hospital lookup, and real-time health news.
 
 ### Features
 - 🩺 Symptom Checker — assess HMPV risk level
