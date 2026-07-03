@@ -64,7 +64,7 @@ No need to build locally — the APK is automatically built by the CI/CD pipelin
 5. Unzip and install the `.apk` on any Android device
 
 > Enable **"Install from unknown sources"** on your Android phone before installing.
-
+> 💡 Built and tested via automated Docker CI/CD pipeline — APK auto-generated on every push.
 ---
 
 ## 📱 About the App
